@@ -4,7 +4,7 @@ using System.Linq;
 using System.Reflection.Emit;
 using UnityEngine;
 
-namespace KFT.OriBF.Qol;
+namespace OriModding.BF.Speedrun;
 
 [HarmonyPatch(typeof(CleverMenuItemSelectionManager), nameof(CleverMenuItemSelectionManager.Start))]
 public class PauseMenuWraparound_Awake

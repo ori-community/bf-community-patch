@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Reflection.Emit;
 
-namespace KFT.OriBF.Qol;
+namespace OriModding.BF.Speedrun;
 
 internal static class MoreSaveSlots
 {
@@ -17,7 +17,7 @@ internal static class MoreSaveSlots
         harmony.Patch(AccessTools.Method("SaveSlotBackupsManager:ClearCache"), transpiler: new HarmonyMethod(AccessTools.Method("MoreSaveSlots:Transpiler")));
     }
 
-    private static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
+    internal static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
     {
         foreach (var ci in instructions)
         {

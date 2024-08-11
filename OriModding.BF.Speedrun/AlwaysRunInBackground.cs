@@ -1,6 +1,7 @@
 ﻿using HarmonyLib;
+using OriModding.BF.Core;
 
-namespace KFT.OriBF.Qol;
+namespace OriModding.BF.Speedrun;
 
 [HarmonyPatch(typeof(GameController), "OnApplicationFocus")]
 internal class AlwaysRunInBackground
@@ -10,9 +11,9 @@ internal class AlwaysRunInBackground
         if (Plugin.RunInBackground.Value)
         {
             GameController.IsFocused = true;
-            return false;
+            return HarmonyHelper.StopExecution;
         }
 
-        return true;
+        return HarmonyHelper.ContinueExecution;
     }
 }

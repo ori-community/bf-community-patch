@@ -1,4 +1,6 @@
-﻿namespace KFT.OriBF.Qol;
+﻿using Core;
+
+namespace OriModding.BF.Speedrun;
 
 internal static class QTMBugfix
 {
@@ -8,13 +10,13 @@ internal static class QTMBugfix
     {
         On.CleverMenuItemSelectionManager.Start += (orig, self) =>
         {
-            delayNavigation = Core.Input.MenuDown.IsPressed || Core.Input.MenuUp.IsPressed;
+            delayNavigation = Input.MenuDown.IsPressed || Input.MenuUp.IsPressed;
             orig(self);
         };
 
         On.CleverMenuItemSelectionManager.FixedUpdate += (orig, self) =>
         {
-            if (self.IsActive && delayNavigation && !Core.Input.MenuDown.IsPressed && !Core.Input.MenuUp.IsPressed)
+            if (self.IsActive && delayNavigation && !Input.MenuDown.IsPressed && !Input.MenuUp.IsPressed)
                 delayNavigation = false;
             orig(self);
         };

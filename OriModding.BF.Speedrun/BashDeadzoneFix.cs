@@ -1,7 +1,7 @@
 ﻿using HarmonyLib;
 using System.Collections.Generic;
 
-namespace KFT.OriBF.Qol;
+namespace OriModding.BF.Speedrun;
 
 internal class BashDeadzoneFix
 {
