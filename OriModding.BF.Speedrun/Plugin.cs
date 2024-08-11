@@ -1,6 +1,8 @@
 ﻿using BepInEx;
 using BepInEx.Configuration;
+using BepInEx.Logging;
 using HarmonyLib;
+using OriModding.BF.Core;
 
 namespace OriModding.BF.Speedrun;
 
@@ -14,8 +16,12 @@ public class Plugin : BaseUnityPlugin
 
     private Harmony harmony;
 
+    public static new ManualLogSource Logger { get; private set; }
+
     private void Awake()
     {
+        Logger = base.Logger;
+
         Logger.LogInfo($"Plugin {PluginInfo.PLUGIN_GUID} is loaded!");
 
         harmony = new Harmony(PluginInfo.PLUGIN_GUID);
@@ -23,9 +29,10 @@ public class Plugin : BaseUnityPlugin
         BashDeadzoneFix.Patch(harmony);
         MoreSaveSlots.Patch(harmony);
 
-        BashDeadzone = Config.Bind("QOL", "Bash Deadzone", 0.5f, "How large should the deadzone be while bashing (min 0%, max 100%)");
-        RunInBackground = Config.Bind("QOL", "Run In Background", true, "Whether the game should continue to run when the window is not selected");
+        BashDeadzone = Config.Bind("Speedrun", "Bash Deadzone", 0.5f, "How large should the deadzone be while bashing (min 0%, max 100%)");
+        RunInBackground = Config.Bind("Speedrun", "Run In Background", true, "Whether the game should continue to run when the window is not selected");
 
         QTMBugfix.Init();
+        Controllers.Add<TurboController>();
     }
 }
