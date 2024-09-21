@@ -114,7 +114,7 @@ public class TurboController : MonoBehaviour
         // Format per line:
         // <target>:<control string>
         // e.g. SpiritFlame:T,LT+FaceX
-        //  Spirit flame turbo is active if T is held, or if left trigger and X are held on a controller
+        //  Spirit flame turbo is active if T is held, or if left trigger and X (left face button) are held on a controller
 
         if (!File.Exists(filepath))
             return;
