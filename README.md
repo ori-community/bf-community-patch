@@ -7,9 +7,11 @@
 * Increased bash deadzone
 * Run in background
 * Quit-to-menu improvements
+* Double bash button
 * 20Hz turbo
 
 ## TODO
 
 * Keyboard binding
 * SA control improvements
+* Installation instructions
