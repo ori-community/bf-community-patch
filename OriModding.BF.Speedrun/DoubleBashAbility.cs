@@ -1,6 +1,7 @@
-﻿using Core;
-using HarmonyLib;
+﻿using HarmonyLib;
 using OriModding.BF.Core.SeinAbilities;
+using UnityEngine;
+using Input = Core.Input;
 
 namespace OriModding.BF.Speedrun;
 
@@ -10,6 +11,8 @@ public class DoubleBashAbility : CustomSeinAbility
 
     public int frame = -1;
     public int maxFrames = 2;
+    private bool blockDoubleBash = false;
+    private Vector3 mousePosition = Vector3.zero;
 
     public override void Awake()
     {
@@ -32,10 +35,21 @@ public class DoubleBashAbility : CustomSeinAbility
 
     public override void UpdateCharacterState()
     {
+        // Stop double bash key working if you move the mouse
+        if (Sein.Abilities.Bash.IsBashing && (mousePosition - UnityEngine.Input.mousePosition).sqrMagnitude > 1f)
+        {
+            blockDoubleBash = true;
+        }
+        else if (!Sein.Abilities.Bash.IsBashing)
+        {
+            mousePosition = UnityEngine.Input.mousePosition;
+            blockDoubleBash = false;
+        }
+
         if (frame == -1)
         {
             // While holding bash, press <double bash button> after the initial minimum bash windup time
-            if (Sein.Abilities.Bash.IsBashing && Sein.Abilities.Bash.m_bashAttackGame?.m_currentState == BashAttackGame.State.Playing && Plugin.DoubleBashInput.Value.OnPressed)
+            if (!blockDoubleBash && Sein.Abilities.Bash.IsBashing && Sein.Abilities.Bash.m_bashAttackGame?.m_currentState == BashAttackGame.State.Playing && Plugin.DoubleBashInput.Value.OnPressed)
                 frame = 0;
         }
         else
@@ -61,20 +75,20 @@ public static class BashInputSuppression
         // Runs after all input has been read
         // Override with our expected double bash inputs
         // i.e. release bash, then press it again on the following frame
-        
+
         if (!DoubleBashAbility.Instance)
             return;
 
         int frame = DoubleBashAbility.Instance.frame;
         var bash = Input.Bash;
-        
+
         switch (frame)
         {
             case 0:
                 bash.Update(true);
                 bash.Update(false);
                 break;
-            
+
             case 1:
                 bash.Update(false);
                 bash.Update(true);
