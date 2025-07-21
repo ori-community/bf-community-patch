@@ -123,6 +123,7 @@ public class TurboController : MonoBehaviour
 
         var targets = typeof(global::Core.Input).GetFields(BindingFlags.Public | BindingFlags.Static)
             .Where(x => x.FieldType == typeof(global::Core.Input.InputButtonProcessor))
+            .Where(x => x.Name != "Bash")
             .ToList();
 
         using var reader = new StreamReader(filepath);
@@ -143,7 +144,7 @@ public class TurboController : MonoBehaviour
             }
 
 
-            var input = new CompoundButtonInput(InputLib.CustomInput.ParseButtons(line[1]));
+            var input = new CompoundButtonInput(InputLib.CustomInput.ParseButtons(line[1].Trim()));
             if (input.Buttons.Length != line[1].Split(new[] { ',' }, System.StringSplitOptions.RemoveEmptyEntries).Length)
             {
                 Plugin.Logger.LogWarning($"Invalid turbo configuration (buttons): {line}");
@@ -154,7 +155,7 @@ public class TurboController : MonoBehaviour
             if (targetInput != null)
             {
                 turboButtons.Add(new TurboButton(input, targetInput.GetValue(null) as global::Core.Input.InputButtonProcessor));
-                Plugin.Logger.LogInfo($"Added turbo: {line[0]}:{line[1]}");
+                Plugin.Logger.LogInfo($"Added turbo: {line[0]}:{line[1].Trim()}");
             }
             else
             {
@@ -163,11 +164,11 @@ public class TurboController : MonoBehaviour
                 {
                     var t = (SpecialTargets)Enum.Parse(typeof(SpecialTargets), line[0], true);
                     turboButtons.Add(new TurboButton(input, null, t));
-                    Plugin.Logger.LogInfo($"Added turbo: {line[0]}:{line[1]}");
+                    Plugin.Logger.LogInfo($"Added turbo: {line[0]}:{line[1].Trim()}");
                 }
                 catch (Exception)
                 {
-                    Plugin.Logger.LogWarning($"Invalid turbo configuration (target): {line}");
+                    Plugin.Logger.LogWarning($"Invalid turbo configuration (target): {string.Join(": ", line)}");
                     continue;
                 }
             }
