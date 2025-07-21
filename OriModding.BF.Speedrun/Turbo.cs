@@ -29,9 +29,6 @@ public class TurboController : MonoBehaviour
 
     class TurboButton(IButtonInput button, global::Core.Input.InputButtonProcessor target, SpecialTargets specialTarget = SpecialTargets.None)
     {
-        private readonly IButtonInput button = button;
-        private readonly global::Core.Input.InputButtonProcessor target = target;
-        private readonly SpecialTargets specialTarget = specialTarget;
         int value = 0;
 
         public void Update()
@@ -103,6 +100,11 @@ public class TurboController : MonoBehaviour
         On.PlayerInput.FixedUpdate += (orig, self) =>
         {
             orig(self);
+            
+            // Turbo messes up this debug menu input handling so just don't turbo while it's open
+            if (DebugMenuB.Active)
+                return;
+            
             foreach (var button in turboButtons)
                 button.Update();
             self.RefreshControls();
