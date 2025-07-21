@@ -14,6 +14,8 @@ namespace OriModding.BF.Speedrun;
 //[BepInDependency(OriModding.BF.ConfigMenu.PluginInfo.PLUGIN_GUID, BepInDependency.DependencyFlags.SoftDependency)]
 public class Plugin : BaseUnityPlugin
 {
+    private const string Version = "0.1.3";
+
     public static ConfigEntry<bool> RunInBackground { get; set; }
     public static ConfigEntry<float> BashDeadzone { get; set; }
     public static ConfigEntry<CustomInput> DoubleBashInput { get; set; }
@@ -42,9 +44,22 @@ public class Plugin : BaseUnityPlugin
                 .AddKeyCodes(KeyCode.T)
                 .AddControllerButtons(ControllerButton.LB)
         );
-        
+
         QTMBugfix.Init();
         Controllers.Add<TurboController>();
         CustomSeinAbilityManager.Add<DoubleBashAbility>("5aa4389e-318b-4756-a57b-42565dd53208");
+    }
+
+    private GUIStyle style;
+
+    public void OnGUI()
+    {
+        // Show version in main menu and pause menu
+        if (GameStateMachine.Instance?.CurrentState is GameStateMachine.State.Logos or GameStateMachine.State.StartScreen or GameStateMachine.State.TitleScreen
+            || Game.UI.Menu?.MainMenuVisible == true)
+        {
+            style ??= new GUIStyle(GUI.skin.label) { alignment = TextAnchor.LowerLeft };
+            GUI.Label(new Rect(6f, Screen.height - 64f - 6f, 300f, 64f), $"Ori DE Speedrun Mod v{Version}", style);
+        }
     }
 }
