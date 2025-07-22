@@ -102,11 +102,8 @@ public static class DoubleBashPatches
 
     static void SetColour(Object unityObject)
     {
-        Console.WriteLine("Setting the colour!");
-        Console.WriteLine(DoubleBashAbility.Instance.shouldHighlight);
-
         var colour = DoubleBashAbility.Instance.shouldHighlight
-            ? new Color(1f, 0f, 0f, 0.7373f)
+            ? new Color(0.9560f, 0.4275f, 0.4275f, 0.6373f)
             : new Color(0.4822f, 0.5228f, 0.5522f, 0.7373f);
 
         DoubleBashAbility.Instance.shouldHighlight = false;
